@@ -33,7 +33,7 @@ const main = () => {
         const port = placeholder.address().port;
         placeholder.close(() => {
             const serverInstance = mock.getServerInstance(Object.assign(config, {'port': port}));
-            serverInstance.bind(
+            serverInstance.bindAsync(
                 `0.0.0.0:${port}`,
                 grpc.ServerCredentials.createInsecure()
             );
