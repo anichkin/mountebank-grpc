@@ -3,7 +3,7 @@
 // mock implementation
 
 const
-    grpc = require('grpc'),
+    grpc = require('@grpc/grpc-js'),
     mb = require('./mountebank/request'),
     client = require('./grpc/client'),
     server = require('./grpc/server'),

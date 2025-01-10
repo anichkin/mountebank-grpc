@@ -1,6 +1,6 @@
 // NOTE: Integration tests instead of unit... mocking callback + promise + events is annoying
 
-const grpc = require('grpc'),
+const grpc = require('@grpc/grpc-js'),
     client = require('../client'),
     grpcImpl = require('./grpc-impl'),
     ENDPOINT = '0.0.0.0:63051';
@@ -20,7 +20,7 @@ describe('integration test: client calls', () => {
         const server = grpcImpl.successServer()
 
         beforeAll(() => {
-            server.bind(ENDPOINT, grpc.ServerCredentials.createInsecure());
+            server.bindAsync(ENDPOINT, grpc.ServerCredentials.createInsecure());
             server.start();
         });
 
@@ -133,7 +133,7 @@ describe('integration test: client calls', () => {
         const server = grpcImpl.errorServer()
 
         beforeAll(() => {
-            server.bind(ENDPOINT, grpc.ServerCredentials.createInsecure());
+            server.bindAsync(ENDPOINT, grpc.ServerCredentials.createInsecure());
             server.start();
         });
 

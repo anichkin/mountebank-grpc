@@ -3,7 +3,7 @@
 // main entry point
 const
     constants = require('./constants'),
-    grpc = require('grpc'),
+    grpc = require('@grpc/grpc-js'),
     mock = require('./mock'),
     logging = require('./helpers/logging'),
     log = logging.logger(),
@@ -11,8 +11,20 @@ const
 
 
 const main = () => {
-    const config = JSON.parse(process.argv[2]),
-        placeholder = net.createServer((sock) => { sock.end('placeholder'); });
+    if (!process.argv[2]) {
+        console.error('Error: No configuration provided.');
+        process.exit(1);
+    }
+
+    let config;
+    try {
+        config = JSON.parse(process.argv[2]);
+    } catch (e) {
+        console.error('Error: Invalid JSON configuration.');
+        process.exit(1);
+    }
+
+    const placeholder = net.createServer((sock) => { sock.end('placeholder'); });
 
     logging.setLogLevel(config.loglevel || constants.LOGGING.INFO.LEVEL);
 
@@ -36,6 +48,5 @@ const main = () => {
         });
     });
 }
-
 
 main();

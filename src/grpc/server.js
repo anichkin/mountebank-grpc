@@ -2,7 +2,7 @@
 
 // mock calls for grpc
 
-const grpc = require('grpc'),
+const grpc = require('@grpc/grpc-js'),
     transform = require('./transform'),
     metadata = require('./metadata');
 
