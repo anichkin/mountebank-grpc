@@ -9,7 +9,6 @@ const
     log = logging.logger(),
     net = require('net');
 
-
 const main = () => {
     if (!process.argv[2]) {
         console.error('Error: No configuration provided.');
@@ -35,16 +34,22 @@ const main = () => {
             const serverInstance = mock.getServerInstance(Object.assign(config, {'port': port}));
             serverInstance.bindAsync(
                 `0.0.0.0:${port}`,
-                grpc.ServerCredentials.createInsecure()
+                grpc.ServerCredentials.createInsecure(),
+                (error, boundPort) => {
+                    if (error) {
+                        console.error('Failed to bind server:', error);
+                        return;
+                    }
+                    serverInstance.start();
+                    let metadata = {
+                        'port': boundPort,
+                        'encoding': 'utf8',
+                        'services': config.services
+                    }
+                    console.log(JSON.stringify(metadata));
+                    log.info(`server started on port '%s'`, boundPort);
+                }
             );
-            serverInstance.start();
-            let metadata = {
-                'port': port,
-                'encoding': 'utf8',
-                'services': config.services
-            }
-            console.log(JSON.stringify(metadata));
-            log.info(`server started on port '%s'`, port);
         });
     });
 }
